@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Earth Jukebox explores NASA El Niño data through visualization and piano sonification.">
+  <title>Earth Jukebox | El Niño</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="/static/css/style.css">
+  <!-- Pinned version. For the final demo, download this file into frontend/vendor/ so it works offline. -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.js"></script>
+</head>
+<body>
+  <a class="skip-link" href="#explore">Skip to content</a>
+  <header class="topbar">
+    <a class="brand" href="/">EARTH<span>JUKEBOX</span></a>
+    <nav aria-label="Primary"><a href="#explore">Explore</a><a href="#piano">Earth Piano</a><a href="#about">Science</a><a href="#credits">Credits</a></nav>
+  </header>
+
+  <main>
+    <section class="hero">
+      <p class="eyebrow">NASA DATA • EARTH SCIENCE • SONIFICATION</p>
+      <h1>Listen to the<br><span>changing Pacific.</span></h1>
+      <p class="hero-copy">Explore an El Niño–related NASA data record and hear its measurements translated into piano notes.</p>
+      <a class="primary-button" href="#explore">Explore the data <span aria-hidden="true">↓</span></a>
+      <div class="hero-orbit orbit-one" aria-hidden="true"></div><div class="hero-orbit orbit-two" aria-hidden="true"></div>
+    </section>
+
+    <section id="explore" class="section">
+      <div class="section-heading">
+        <div><p class="eyebrow">01 / DATA EXPLORER</p><h2>Observe the signal</h2></div>
+        <span id="data-status" class="status" role="status">Checking dataset…</span>
+      </div>
+
+      <div id="meta-warnings" class="banner" role="note" hidden>
+        <strong>Before you present this:</strong>
+        <ul id="meta-warnings-list"></ul>
+      </div>
+
+      <noscript><p class="message">This site needs JavaScript to draw charts and play sound.</p></noscript>
+
+      <div class="info-grid">
+        <article class="info-card"><p class="card-label">NASA DATA PRODUCT</p><h3 id="source-name">Loading…</h3><p id="source-detail"></p><p id="source-link" class="source-line"></p></article>
+        <article class="info-card"><p class="card-label">VARIABLE</p><h3 id="variable-name">—</h3><p id="variable-unit"></p></article>
+        <article class="info-card"><p class="card-label">OBSERVATIONS</p><h3 id="observation-count">—</h3><p id="date-range"></p></article>
+      </div>
+
+      <div class="filter-bar">
+        <label>From <input id="start-date" type="date"></label>
+        <label>To <input id="end-date" type="date"></label>
+        <label>Detail
+          <select id="resample-select">
+            <option value="none">Original observations</option>
+            <option value="monthly">Monthly mean</option>
+            <option value="yearly">Yearly mean</option>
+          </select>
+        </label>
+        <button id="apply-button" class="secondary-button" type="button">Apply</button>
+      </div>
+
+      <div class="chart-card">
+        <div class="chart-top">
+          <div><p class="card-label">TIME SERIES</p><h3>NASA measurement history</h3></div>
+          <button id="reload-button" class="secondary-button" type="button">Reload data</button>
+        </div>
+        <p id="chart-message" class="message" aria-live="polite">Loading…</p>
+        <div class="chart-wrap"><canvas id="enso-chart" role="img" aria-label="Line chart of the selected NASA variable over time"></canvas></div>
+        <p class="hint">Tip: click the chart to choose where playback starts.</p>
+      </div>
+
+      <div class="stats-row">
+        <div><span>Minimum (selection)</span><strong id="stat-min">—</strong></div>
+        <div><span>Mean (selection)</span><strong id="stat-mean">—</strong></div>
+        <div><span>Maximum (selection)</span><strong id="stat-max">—</strong></div>
+      </div>
+    </section>
+
+    <section id="piano" class="section piano-section">
+      <div class="section-heading">
+        <div><p class="eyebrow">02 / DATA SONIFICATION</p><h2>Hear the data</h2></div>
+        <span class="sound-tag">SYNTHESISED PIANO TONES</span>
+      </div>
+      <p class="section-copy">Each note comes from one observation. This is an experimental musical representation, not the literal sound of the ocean.</p>
+
+      <div class="piano-card">
+        <div class="piano-controls">
+          <button id="play-button" class="primary-button" type="button" disabled>▶ Play</button>
+          <button id="stop-button" class="secondary-button" type="button" disabled>■ Stop</button>
+          <label class="control-label" for="tempo-control">Tempo <span id="tempo-value">6 notes/s</span></label>
+          <input id="tempo-control" type="range" min="2" max="16" step="1" value="6">
+          <label class="control-label" for="volume-control">Volume</label>
+          <input id="volume-control" type="range" min="0" max="1" step="0.05" value="0.6">
+          <label class="control-label" for="scale-select">Scale</label>
+          <select id="scale-select">
+            <option value="chromatic">Chromatic (all notes)</option>
+            <option value="major_pentatonic">Major pentatonic</option>
+            <option value="minor_pentatonic">Minor pentatonic</option>
+            <option value="major">Major</option>
+          </select>
+        </div>
+        <progress id="progress" max="1" value="0" aria-label="Playback progress"></progress>
+        <p id="duration-estimate" class="hint"></p>
+        <div class="piano-visual" aria-hidden="true"><div class="piano-glow"></div><div class="piano-keys"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div></div>
+        <p id="audio-message" class="message">Press Play (or Space) to start; browsers require a click before audio.</p>
+        <p id="now-playing" class="now-playing" role="status" aria-live="off">No observation playing</p>
+      </div>
+      <div class="mapping-note"><strong>Current mapping:</strong> <span id="mapping-text">Load data to see the mapping.</span></div>
+    </section>
+
+    <section id="about" class="section about-section">
+      <p class="eyebrow">03 / SCIENCE &amp; TRANSPARENCY</p>
+      <h2>Science first.<br><span>Sound as another lens.</span></h2>
+      <p class="section-copy">El Niño is the warm phase of the El Niño–Southern Oscillation (ENSO), a coupled ocean–atmosphere pattern in the tropical Pacific. The quantity shown here is a sea-surface-height–based indicator derived from satellite altimetry. It is <strong>not</strong> a sea-surface-temperature map, and the chart does not label individual dates as El Niño or La Niña.</p>
+    </section>
+
+    <section id="credits" class="section">
+      <p class="eyebrow">04 / CREDITS</p>
+      <h2>Data source</h2>
+      <p id="citation" class="section-copy"></p>
+    </section>
+  </main>
+
+  <footer><span>EARTH JUKEBOX</span><span>Built to explore NASA Earth data responsibly.</span></footer>
+  <script type="module" src="/static/js/main.js"></script>
+</body>
+</html>

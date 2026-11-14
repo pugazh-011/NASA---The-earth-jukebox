@@ -1,0 +1,9 @@
+{
+  "name": "earth-jukebox",
+  "private": true,
+  "type": "module",
+  "description": "Earth Jukebox - NASA El Nino data visualisation and piano sonification",
+  "scripts": {
+    "test:js": "node --test \"tests/*.test.mjs\""
+  }
+}

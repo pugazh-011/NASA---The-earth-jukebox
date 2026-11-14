@@ -1,0 +1,28 @@
+{
+  "project": "Earth Jukebox",
+  "topic": "El Niño / ENSO",
+  "source_name": "NASA-SSH ENSO Sea Surface Height Indicator",
+  "provider": "NASA/JPL, PO.DAAC",
+  "source_url": "https://podaac.jpl.nasa.gov/dataset/NASA_SSH_ENSO_INDICATOR",
+  "doi": "10.5067/NSIND-ENSV1",
+  "citation": "Willis, J. K., S. Fournier, K. Marlis, and E. Killett. 2025. NASA-SSH ENSO Sea Surface Height Indicator. Ver. 1. PO.DAAC, CA, USA. Dataset accessed [YYYY-MM-DD] at https://doi.org/10.5067/NSIND-ENSV1",
+  "accessed_on": null,
+  "variable": "ENSO sea surface height indicator (from satellite-altimeter sea surface height anomalies)",
+  "variable_is_temperature": false,
+  "unit": null,
+  "nominal_coverage": "1993-01-04 to present, weekly to less-than-monthly",
+  "provenance_summary": "Indicator computed from NASA-SSH Simple Gridded Sea Surface Height (reference missions only: TOPEX/Poseidon, Jason series, Sentinel-6). Team must decide whether the reference missions' international partners satisfy the event's NASA-only rule.",
+  "verification": {
+    "nasa_only_rule_checked": false,
+    "checked_by": null,
+    "checked_on": null
+  },
+  "sonification": {
+    "reference": null,
+    "range_min": null,
+    "range_max": null,
+    "midi_low": 48,
+    "midi_high": 72
+  },
+  "notes": "Fill 'unit' from the NASA-SSH User Guide. Leave sonification range_min/range_max null to use the full dataset range, or set justified fixed limits."
+}
